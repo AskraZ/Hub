@@ -6,35 +6,35 @@
       <description>Last 10 notes on Quartz 4</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
-    <title>Programmazione I</title>
-    <link>https://quartz.jzhao.xyz/Programmazione-I</link>
-    <guid>https://quartz.jzhao.xyz/Programmazione-I</guid>
-    <description><![CDATA[ gli esercizi ed i progetti si trovano su github.com/AskraZ/APPUNTI-UNICT-INF WHILE il comando while genera un ciclo che finisce quando la sua condizione (o le sue condizioni) sono soddisfatte. ]]></description>
-    <pubDate>Thu, 27 Nov 2025 11:17:00 GMT</pubDate>
-  </item><item>
-    <title>Strutture Discrete</title>
-    <link>https://quartz.jzhao.xyz/Strutture-Discrete</link>
-    <guid>https://quartz.jzhao.xyz/Strutture-Discrete</guid>
-    <description><![CDATA[ Indice Parte I Parte II Parte I LOGICA PROPOSIZIONALE la logica proposizionale è strettamente collegata al mondo binario costituito da {0,1}. ]]></description>
-    <pubDate>Thu, 27 Nov 2025 11:14:45 GMT</pubDate>
-  </item><item>
     <title>Algebra Lineare</title>
     <link>https://quartz.jzhao.xyz/Algebra-Lineare</link>
     <guid>https://quartz.jzhao.xyz/Algebra-Lineare</guid>
     <description><![CDATA[ Indice Strutture Algebriche Matrici Spazi Vettoriali Applicazioni Lineari Strutture Algebriche Gli insiemi numerici principali sono i seguenti: Z = \{0, \pm1,\pm2,\pm3,...\pm n\} Q=\{\frac{m}{n}| m \in Z , n\in Z, n \neq0\} R=\{M,C_1,C_2....C_{\infty}|M\in Z, C_{i}\in Z, 0 \leq C_{i} \leq 9\} Noi sa... ]]></description>
-    <pubDate>Thu, 27 Nov 2025 11:12:37 GMT</pubDate>
+    <pubDate>Thu, 27 Nov 2025 17:22:09 GMT</pubDate>
   </item><item>
     <title>Architettura Degli Elaboratori</title>
     <link>https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori</link>
     <guid>https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori</guid>
     <description><![CDATA[ Indice INTRODUZIONE MEMORIA BUS I/O PROCESSORE LIVELLO SOFTWARE PIPELINE STRUTTURA BASE CPU INTRODUZIONE un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema. ]]></description>
-    <pubDate>Thu, 27 Nov 2025 10:43:50 GMT</pubDate>
+    <pubDate>Thu, 27 Nov 2025 17:22:09 GMT</pubDate>
+  </item><item>
+    <title>Programmazione I</title>
+    <link>https://quartz.jzhao.xyz/Programmazione-I</link>
+    <guid>https://quartz.jzhao.xyz/Programmazione-I</guid>
+    <description><![CDATA[ gli esercizi ed i progetti si trovano su github.com/AskraZ/APPUNTI-UNICT-INF WHILE il comando while genera un ciclo che finisce quando la sua condizione (o le sue condizioni) sono soddisfatte. ]]></description>
+    <pubDate>Thu, 27 Nov 2025 17:22:09 GMT</pubDate>
+  </item><item>
+    <title>Strutture Discrete</title>
+    <link>https://quartz.jzhao.xyz/Strutture-Discrete</link>
+    <guid>https://quartz.jzhao.xyz/Strutture-Discrete</guid>
+    <description><![CDATA[ Indice Parte I Parte II Parte I LOGICA PROPOSIZIONALE la logica proposizionale è strettamente collegata al mondo binario costituito da {0,1}. ]]></description>
+    <pubDate>Thu, 27 Nov 2025 17:22:09 GMT</pubDate>
   </item><item>
     <title>Hub</title>
     <link>https://quartz.jzhao.xyz/</link>
     <guid>https://quartz.jzhao.xyz/</guid>
     <description><![CDATA[ Questo è un Hub dove pubblico tutti i miei appunti scritti su Obsidian. ]]></description>
-    <pubDate>Wed, 23 Aug 2023 19:09:04 GMT</pubDate>
+    <pubDate>Thu, 27 Nov 2025 17:22:09 GMT</pubDate>
   </item>
     </channel>
   </rss>

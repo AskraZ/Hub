@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: 65hek-dlsnk
+created: 2025-11-27T22:07:07+01:00
