@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head><title>Architettura Degli Elaboratori</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="Quartz 4"/><meta property="og:title" content="Architettura Degli Elaboratori"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Architettura Degli Elaboratori"/><meta name="twitter:description" content="Indice INTRODUZIONE MEMORIA BUS I/O PROCESSORE LIVELLO SOFTWARE PIPELINE STRUTTURA BASE CPU INTRODUZIONE un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema."/><meta property="og:description" content="Indice INTRODUZIONE MEMORIA BUS I/O PROCESSORE LIVELLO SOFTWARE PIPELINE STRUTTURA BASE CPU INTRODUZIONE un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema."/><meta property="og:image:alt" content="Indice INTRODUZIONE MEMORIA BUS I/O PROCESSORE LIVELLO SOFTWARE PIPELINE STRUTTURA BASE CPU INTRODUZIONE un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema."/><meta property="twitter:domain" content="quartz.jzhao.xyz"/><meta property="og:url" content="https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori"/><meta property="twitter:url" content="https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori"/><link rel="icon" href="./static/icon.png"/><meta name="description" content="Indice INTRODUZIONE MEMORIA BUS I/O PROCESSORE LIVELLO SOFTWARE PIPELINE STRUTTURA BASE CPU INTRODUZIONE un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema."/><meta name="generator" content="Quartz"/><link href="./index.css" rel="stylesheet" type="text/css" spa-preserve/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  padding: 2rem;
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL2hvbWUvc2Fsdm8vcXVhcnR6L3F1YXJ0ei9jb21wb25lbnRzL3N0eWxlcyIsInNvdXJjZXMiOlsibWVybWFpZC5pbmxpbmUuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTs7QUFHRjtFQUNFO0VBQ0E7O0FBR0Y7RUFDRTs7O0FBS0Y7RUFDRTtFQUNBOzs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTs7QUFHRjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7O0FBR0Y7RUFDRTs7QUFJRjtFQUNFO0VBQ0E7RUFDQSIsInNvdXJjZXNDb250ZW50IjpbIi5leHBhbmQtYnV0dG9uIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbG9hdDogcmlnaHQ7XG4gIHBhZGRpbmc6IDAuNHJlbTtcbiAgbWFyZ2luOiAwLjNyZW07XG4gIHJpZ2h0OiAwOyAvLyBOT1RFOiByaWdodCB3aWxsIGJlIHNldCBpbiBtZXJtYWlkLmlubGluZS50c1xuICBjb2xvcjogdmFyKC0tZ3JheSk7XG4gIGJvcmRlci1jb2xvcjogdmFyKC0tZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWxpZ2h0KTtcbiAgYm9yZGVyOiAxcHggc29saWQ7XG4gIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgb3BhY2l0eTogMDtcbiAgdHJhbnNpdGlvbjogMC4ycztcblxuICAmID4gc3ZnIHtcbiAgICBmaWxsOiB2YXIoLS1saWdodCk7XG4gICAgZmlsdGVyOiBjb250cmFzdCgwLjMpO1xuICB9XG5cbiAgJjpob3ZlciB7XG4gICAgY3Vyc29yOiBwb2ludGVyO1xuICAgIGJvcmRlci1jb2xvcjogdmFyKC0tc2Vjb25kYXJ5KTtcbiAgfVxuXG4gICY6Zm9jdXMge1xuICAgIG91dGxpbmU6IDA7XG4gIH1cbn1cblxucHJlIHtcbiAgJjpob3ZlciA+IC5leHBhbmQtYnV0dG9uIHtcbiAgICBvcGFjaXR5OiAxO1xuICAgIHRyYW5zaXRpb246IDAuMnM7XG4gIH1cbn1cblxuI21lcm1haWQtY29udGFpbmVyIHtcbiAgcG9zaXRpb246IGZpeGVkO1xuICBjb250YWluOiBsYXlvdXQ7XG4gIHotaW5kZXg6IDk5OTtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xuICB3aWR0aDogMTAwdnc7XG4gIGhlaWdodDogMTAwdmg7XG4gIG92ZXJmbG93OiBoaWRkZW47XG4gIGRpc3BsYXk6IG5vbmU7XG4gIGJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpO1xuICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuNSk7XG5cbiAgJi5hY3RpdmUge1xuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgfVxuXG4gICYgPiAjbWVybWFpZC1zcGFjZSB7XG4gICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gICAgYm9yZGVyLXJhZGl1czogNXB4O1xuICAgIHBvc2l0aW9uOiBmaXhlZDtcbiAgICB0b3A6IDUwJTtcbiAgICBsZWZ0OiA1MCU7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIHdpZHRoOiA4MHZ3O1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG5cbiAgICAmID4gLm1lcm1haWQtY29udGVudCB7XG4gICAgICBwYWRkaW5nOiAycmVtO1xuICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgICAgdHJhbnNmb3JtLW9yaWdpbjogMCAwO1xuICAgICAgdHJhbnNpdGlvbjogdHJhbnNmb3JtIDAuMXMgZWFzZTtcbiAgICAgIG92ZXJmbG93OiB2aXNpYmxlO1xuICAgICAgbWluLWhlaWdodDogMjAwcHg7XG4gICAgICBtaW4td2lkdGg6IDIwMHB4O1xuXG4gICAgICBwcmUge1xuICAgICAgICBtYXJnaW46IDA7XG4gICAgICAgIGJvcmRlcjogbm9uZTtcbiAgICAgIH1cblxuICAgICAgc3ZnIHtcbiAgICAgICAgbWF4LXdpZHRoOiBub25lO1xuICAgICAgICBoZWlnaHQ6IGF1dG87XG4gICAgICB9XG4gICAgfVxuXG4gICAgJiA+IC5tZXJtYWlkLWNvbnRyb2xzIHtcbiAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICAgIGJvdHRvbTogMjBweDtcbiAgICAgIHJpZ2h0OiAyMHB4O1xuICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgIGdhcDogOHB4O1xuICAgICAgcGFkZGluZzogOHB4O1xuICAgICAgYmFja2dyb3VuZDogdmFyKC0tbGlnaHQpO1xuICAgICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICAgIGJvcmRlci1yYWRpdXM6IDZweDtcbiAgICAgIGJveC1zaGFkb3c6IDAgMnB4IDRweCByZ2JhKDAsIDAsIDAsIDAuMSk7XG4gICAgICB6LWluZGV4OiAyO1xuXG4gICAgICAubWVybWFpZC1jb250cm9sLWJ1dHRvbiB7XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gICAgICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICAgICAgICB3aWR0aDogMzJweDtcbiAgICAgICAgaGVpZ2h0OiAzMnB4O1xuICAgICAgICBwYWRkaW5nOiAwO1xuICAgICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICAgIGNvbG9yOiB2YXIoLS1kYXJrKTtcbiAgICAgICAgYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgICAgIGZvbnQtc2l6ZTogMTZweDtcbiAgICAgICAgZm9udC1mYW1pbHk6IHZhcigtLWJvZHlGb250KTtcbiAgICAgICAgdHJhbnNpdGlvbjogYWxsIDAuMnMgZWFzZTtcblxuICAgICAgICAmOmhvdmVyIHtcbiAgICAgICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgICB9XG5cbiAgICAgICAgJjphY3RpdmUge1xuICAgICAgICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgxcHgpO1xuICAgICAgICB9XG5cbiAgICAgICAgLy8gU3R5bGUgdGhlIHJlc2V0IGJ1dHRvbiBkaWZmZXJlbnRseVxuICAgICAgICAmOm50aC1jaGlsZCgyKSB7XG4gICAgICAgICAgd2lkdGg6IGF1dG87XG4gICAgICAgICAgcGFkZGluZzogMCAxMnB4O1xuICAgICAgICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cbiAgfVxufVxuIl19 */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="./prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("./static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://quartz.jzhao.xyz/index.xml"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image" content="https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori-og-image.webp"/><meta property="og:image:url" content="https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori-og-image.webp"/><meta name="twitter:image" content="https://quartz.jzhao.xyz/Architettura-Degli-Elaboratori-og-image.webp"/><meta property="og:image:type" content="image/.webp"/></head><body data-slug="Architettura-Degli-Elaboratori"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href=".">Quartz 4</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>Search</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="Dark mode"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="Light mode"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="Reader mode"><title>Reader mode</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder?a.displayName.localeCompare(b.displayName,void 0,{numeric:!0,sensitivity:\&quot;base\&quot;}):!a.isFolder&amp;&amp;b.isFolder?1:-1&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>Explorer</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-2" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="./">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>Architettura Degli Elaboratori</a></div></nav><h1 class="article-title">Architettura Degli Elaboratori</h1><p show-comma="true" class="content-meta"><time datetime="2025-11-27T10:43:50.035Z">Nov 27, 2025</time><span>30 min read</span></p></div></div><article class="popover-hint"><h1 id="indice">Indice<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#indice" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p><a href="#introduzione" class="internal alias">INTRODUZIONE</a>
+<a href="#memoria" class="internal alias">MEMORIA</a>
+<a href="#bus" class="internal alias">BUS</a>
+<a href="#io" class="internal alias">I/O</a>
+<a href="#processore" class="internal alias">PROCESSORE</a>
+<a href="#livello-software" class="internal alias">LIVELLO SOFTWARE</a>
+<a href="#pipeline" class="internal alias">PIPELINE</a>
+<a href="#struttura-base-cpu" class="internal alias">STRUTTURA BASE CPU</a></p>
+<h1 id="introduzione">INTRODUZIONE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#introduzione" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>un’algoritmo è una serie di istruzioni ben definite, codificate in un linguaggio x che mira al risolvere un dato problema.
+Con “Architettura del calcolatore” intendiamo l’insieme della unità principali che compongono il calcolatore e come interagiscono tra di esse.
+Le funzioni base di un calcolatore possono essere suddivise in:</p>
+<ul>
+<li>Memorizzare dei dati</li>
+<li>Elaborare dei dati</li>
+<li>Trasferire dei dati</li>
+<li>Controllo</li>
+</ul>
+<h2 id="il-processore">IL PROCESSORE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#il-processore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Il processore è costituito da 4 parti fondamentali:</p>
+<ul>
+<li>Il <strong>Program Counter</strong>, che è una locazione di memoria contenente l’indirizzo dell’istruzione da eseguire.</li>
+<li>Il <strong>Registro delle Istruzioni</strong>, che è una locazione di memoria contenente l’istruzione da eseguire.</li>
+<li><strong>L’unità logico-aritmetica</strong>, che fa i calcoli.</li>
+<li><strong>L’unità di controllo</strong>, che fa eseguire l’istruzione tramite i cambiamenti di stato.</li>
+</ul>
+<h2 id="la-memoria-centrale">La Memoria Centrale<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#la-memoria-centrale" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La memoria si suddivide in due categorie:</p>
+<ul>
+<li>Volatile</li>
+<li>Non Volatile
+La memoria volatile è un tipo di memoria che “perde” i dati quando il calcolatore viene spento, ed anch’essa si suddivide in due componenti:</li>
+<li>RAM (Random access memory), che immagazzina i programmi in esecuzione.</li>
+<li>CACHE, che immagazzina i dati più utilizzati per tenerli pronti al momento di riutilizzarli.
+La memoria non volatile è la ROM (Read only Memory), che immagazzina i dati a lungo termine, anche a spegnimento del calcolatore.</li>
+</ul>
+<h2 id="macchina-di-von-neumann">MACCHINA DI VON NEUMANN<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#macchina-di-von-neumann" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La macchina di Von Neumann è un concetto diverso rispetto alla MdT, infatti si focalizza sul concetto “pratico” della risoluzione di un algoritmo, essa infatti è composta da:</p>
+<ul>
+<li>CPU</li>
+<li>MEMORIA</li>
+<li>BUS</li>
+<li>I/O</li>
+<li>MEMORIA DI MASSA</li>
+</ul>
+<blockquote>
+<p>A livello teorico, è una terna di {N, IS, P}:</p>
+<ul>
+<li>N = <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3...</span><span class="mclose">}</span></span></span></span>, è l’insieme dei numeri naturali (rappresenta l’alfabeto della macchina).</li>
+<li>IS = <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal" style="margin-right:0.02778em;">ZERO</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.07153em;">NC</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">SOM</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">SOT</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">MO</span><span class="mord mathnormal">L</span><span class="mclose">}</span></span></span></span>, è l’istruction set, ovvero l’insieme delle istruzioni generiche della macchina.</li>
+<li>P =  <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span>   , è una sequenza finita e non vuota di istruzioni prese da IS, con valori specifici della variabili, andando a comporre un programma.</li>
+</ul>
+</blockquote>
+<h2 id="layer-fondamentali">Layer fondamentali<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#layer-fondamentali" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>L’architettura è un “contratto tra hardware e software” (se l’architettura è 32bit/64bit, il sistema operativo o le applicazioni devo corrispondere alla versione dell’architettura).
+l’implementazione riguarda invece come l’architettura viene realizzata fisicamente.
+l’informatica è suddivisa in 3 layer fondamentali:</p>
+<ul>
+<li>APPLICAZIONI</li>
+<li>SISTEMA OPERATIVO</li>
+<li>HARDWARE
+L’architettura di von neumann è tutt’oggi il fondamento architetturale.
+il bottleneck di von neumann è un effetto causato dalla differenza di banda tra CPU e memoria, come se la latenza della memoria facesse da “tappo” alla cpu.</li>
+</ul>
+<h2 id="la-pipeline">LA PIPELINE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#la-pipeline" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>la pipeline è la catena di distribuzione:</p>
+<blockquote>
+<p>FETCH (recupero dell’istruzione della memoria)
+DECODE (decodifica e interpreta l’istruzione)
+EXECUTE (escuzione dell’operazione)
+MEMORY (accesso alla memoria)
+WRITEBACK (salva nei registri)</p>
+</blockquote>
+<p>errori con cui si ci può scontrare nella pipeline:</p>
+<ul>
+<li><strong>Data Hazard</strong></li>
+</ul>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="jsx" data-theme="github-light github-dark"><code data-language="jsx" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">x </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> a</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">b</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">y </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> x</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">c</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">y dipende da x, quindi si può avere un contrasto di dato</span></span></code></pre></figure>
+<ul>
+<li><strong>Control Hazard</strong>
+tramite comandi come il GOTO, alteriamo il flusso del programma, portando alla riesecuzione della pipeline, ma si può anche generare un data hazard</li>
+<li><strong>Structural Hazard</strong>
+i processi si “battono” per avere le risorse della cpu</li>
+</ul>
+<h2 id="hazard">Hazard<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#hazard" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Quando più istruzioni vengono eseguite in parallelo, possono verificarsi <strong>hazard</strong>, cioè conflitti che impediscono l’esecuzione simultanea corretta.</p>
+<h3 id="tipologie-principali">Tipologie principali<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#tipologie-principali" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>Data Hazard</strong> → un’istruzione dipende dal risultato di un’altra non ancora completata.<em>Esempio: B usa un valore che A deve ancora calcolare.</em></li>
+<li><strong>Structural Hazard</strong> → due istruzioni vogliono usare la stessa risorsa hardware.<em>Esempio: entrambe vogliono accedere all’unità di moltiplicazione.</em></li>
+<li><strong>Control Hazard</strong> → causati dai salti condizionali, dove il processore non sa ancora quale direzione prendere.</li>
+</ul>
+<blockquote>
+<p>I processori moderni riducono gli hazard tramite riordino dinamico e predizione dei salti.</p>
+</blockquote>
+<hr/>
+<h2 id="esecuzione-fuori-ordine-out-of-order-execution">Esecuzione Fuori Ordine (Out-of-Order Execution)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#esecuzione-fuori-ordine-out-of-order-execution" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Con questa tecnica, il processore <strong>riorganizza dinamicamente le istruzioni</strong> per sfruttare al massimo le proprie risorse.</p>
+<p>Se un’istruzione deve aspettare un dato, il processore può <strong>eseguirne un’altra indipendente</strong> nel frattempo.</p>
+<p>Le strutture come la <strong>Reorder Buffer</strong> assicurano che i risultati vengano comunque resi visibili <strong>nell’ordine corretto</strong>, garantendo coerenza del programma.</p>
+<hr/>
+<h2 id="branch-prediction">Branch Prediction<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#branch-prediction" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>I <strong>salti condizionali</strong> (branch) introducono incertezza nel flusso del programma.</p>
+<p>La <strong>branch prediction</strong> tenta di <strong>indovinare in anticipo</strong> quale percorso verrà preso.</p>
+<p>I processori moderni:</p>
+<ul>
+<li>usano <strong>predittori storici</strong> o <strong>reti neurali</strong>,</li>
+<li>raggiungono <strong>accuratezze superiori al 95%</strong>.</li>
+</ul>
+<blockquote>
+<p>Se la predizione è sbagliata, entra in gioco il rollback per ripristinare lo stato precedente.</p>
+</blockquote>
+<hr/>
+<h3 id="rollback">ROLLBACK<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#rollback" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Il <strong>rollback</strong> permette di <strong>annullare le istruzioni speculative</strong> e <strong>ripristinare lo stato corretto</strong> del processore.</p>
+<p>È analogo ai <strong>punti di ripristino</strong> di un sistema operativo: se qualcosa va storto, si torna indietro all’ultimo stato valido.</p>
+<h2 id="il-microprocessore">IL MICROPROCESSORE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#il-microprocessore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>il microprocressore è stato una rivoluzione, avendo un’intera cpu su un singolo chip di silicio, portando l’informatica in tutti i contesti, tra cui il personal computer.
+ulteriore agevolazione dall’integrazione in un singolo chip, si elimina il BUS e quindi riduciamo drasticamente il rallentamento provocato da esso, evitando il bottleneck.</p>
+<h2 id="evoluzione-isa-istruction-set-architecture">EVOLUZIONE ISA (ISTRUCTION SET ARCHITECTURE)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#evoluzione-isa-istruction-set-architecture" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>CISC (complex istruction set computer)
+istruzioni complesse che eseguono operazioni elaborate in un singolo comando.
+esempi sono: x86 intel e amd</li>
+<li>RISC (REDUCED ISTRUCTION SET COMPUTER)
+set di istruzioni semplificate ma efficienti.
+esempi sono: ARM per i dispositivi mobile, MIPS per sistemi embedded</li>
+<li>le architetture moderne utilizzano un sistema ibrido tra CISC e RISC</li>
+</ul>
+<h2 id="architetture-superscalari">ARCHITETTURE SUPERSCALARI<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#architetture-superscalari" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Le architetture superscalari rappresentano un’importante evoluzione nel design dei processori moderni. Questi processori sono caratterizzati dalla capacità di eseguire simultaneamente molteplici istruzioni durante ogni singolo ciclo di clock, sfruttando il parallelismo a livello di istruzioni per migliorare significativamente le prestazioni complessive del sistema.</p>
+<h2 id="superpipelining">SUPERPIPELINING<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#superpipelining" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Il superpipelining rappresenta una tecnica avanzata che consiste nell’aumentare significativamente il numero di stadi che compongono la pipeline del processore. Attraverso questa suddivisione più granulare, ogni singolo stadio della pipeline viene ridotto in termini di complessità e durata, permettendo così di raggiungere frequenze di clock molto più elevate rispetto alle architetture tradizionali.</p>
+<blockquote>
+<p>Entrambe le tecnologie, sia i processori superscalari che il superpipelining, contribuiscono in modo sostanziale all’aumento del throughput complessivo del sistema, ovvero la quantità totale di istruzioni che possono essere elaborate nell’unità di tempo.</p>
+</blockquote>
+<h2 id="issue-width">Issue Width<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#issue-width" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>L’<strong>issue width</strong> rappresenta il <strong>numero massimo di istruzioni</strong> che un processore <em>superscalare</em> può inviare in esecuzione in un singolo ciclo di clock.</p>
+<p>Ad esempio, se un processore ha un’issue width di <strong>4</strong>, significa che può potenzialmente eseguire fino a <strong>4 istruzioni nello stesso ciclo</strong>.</p>
+<blockquote>
+<p>Aumentare la issue width migliora il parallelismo, ma aumenta anche la complessità e il rischio di conflitti tra istruzioni.</p>
+</blockquote>
+<h2 id="era-multicore">Era Multicore<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#era-multicore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Quando i limiti fisici (calore, consumo) hanno bloccato l’aumento delle frequenze, si è passati dai <strong>processori single-core</strong> ai <strong>multicore</strong>.</p>
+<p>In questo modo più core lavorano in parallelo, aumentando le prestazioni tramite <strong>parallelismo spaziale</strong>.</p>
+<p>Il problema principale è la <strong>coerenza della memoria condivisa</strong>.</p>
+<p>Per risolverlo, vengono usati protocolli come:</p>
+<ul>
+<li><strong>MESI (Modified, Exclusive, Shared, Invalid)</strong> → garantisce che tutti i core abbiano una visione coerente della memoria.</li>
+</ul>
+<hr/>
+<h2 id="gpu-e-parallelismo-massivo">GPU e Parallelismo Massivo<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#gpu-e-parallelismo-massivo" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Le <strong>GPU (Graphics Processing Unit)</strong> portano il concetto di parallelismo all’estremo.</p>
+<p>A differenza delle CPU (pochi core potenti), le GPU hanno <strong>centinaia o migliaia di core leggeri</strong>, ideali per eseguire <strong>molti calcoli in parallelo</strong>.</p>
+<p>Sono perfette per:</p>
+<ul>
+<li>elaborare immagini (matrici R-G-B),</li>
+<li>machine learning,</li>
+<li>simulazioni scientifiche.</li>
+</ul>
+<blockquote>
+<p>Le GPU privilegiano il throughput elevato (tante operazioni contemporanee) piuttosto che la bassa latenza.</p>
+</blockquote>
+<h2 id="architetture-ibride-ed-eterogenee">Architetture ibride ed Eterogenee<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#architetture-ibride-ed-eterogenee" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>L’evoluzione verso architetture ibride rappresenta la risposta moderna e più avanzata alle crescenti esigenze di efficienza energetica e di prestazioni altamente specializzate nei sistemi di calcolo contemporanei. L’integrazione strategica di più processori diversificati e componenti di elaborazione su un singolo chip consente di ottimizzare in modo significativo il consumo energetico complessivo del sistema e di migliorare notevolmente le prestazioni complessive per tipologie di lavori specifici e carichi computazionali mirati.</p>
+<p><img src="attachment:2671636c-6fa7-48b0-a02b-fd6e57642c82:Schermata_20251013_102934.png" alt="Schermata_20251013_102934.png"/></p>
+<blockquote>
+<p>L’offload computazionale permette alla CPU di delegare compiti specifici agli acceleratori più efficienti, dato che gli acceleratori dedicati sono 10-100 volte più efficienti.</p>
+</blockquote>
+<h1 id="memoria">MEMORIA<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#memoria" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>La <strong>memoria</strong> di un calcolatore può essere vista come un <strong>contenitore ordinato di celle</strong>, ognuna delle quali può contenere un dato.</p>
+<p>Ogni <strong>cella di memoria</strong> ha una <strong>dimensione di 1 byte</strong> (8 bit) e possiede un <strong>indirizzo univoco</strong> che serve per localizzarla e accedere al valore che contiene.</p>
+<p>Gli <strong>indirizzi</strong> partono sempre da <strong>zero</strong>, quindi l’indirizzo dell’ultima cella corrisponde al <strong>numero totale di celle meno uno</strong>.</p>
+<p>Ad esempio, una memoria composta da 1024 celle avrà indirizzi che vanno da 0 a 1023.</p>
+<hr/>
+<p>L’<strong>ampiezza dello spazio di indirizzamento</strong> dipende dal numero di linee del <strong>bus indirizzi</strong> del sistema.</p>
+<p>In generale, se il bus indirizzi ha <em>n</em> linee, lo spazio di indirizzamento sarà pari a: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Questo valore indica <strong>quante celle di memoria</strong> è possibile indirizzare.</p>
+<p>Ad esempio:</p>
+<ul>
+<li>con 16 linee di indirizzi → <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">65.536</span><span class="mclose">)</span></span></span></span> locazioni (64 KB);</li>
+<li>con 32 linee → <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4.294.967.296</span><span class="mclose">)</span></span></span></span> locazioni (4 GB).</li>
+</ul>
+<p>In un sistema operativo moderno, la memoria può essere <strong>riassegnata</strong> a più processi, grazie alle tecniche di <strong>allocazione dinamica</strong> e <strong>memoria virtuale</strong>.</p>
+<p>Un esempio pratico è il <strong>file system FAT32</strong>, che non può gestire file superiori a 4 GB, ma può accettare più trasferimenti da dimensioni inferiori (ad esempio, due file da 3 GB ciascuno).</p>
+<hr/>
+<p>Il <strong>contenuto della memoria principale</strong> rimane memorizzato solo <strong>finché il computer è alimentato</strong>.</p>
+<p>Quando l’alimentazione viene interrotta, i dati vengono persi: per questo motivo la memoria RAM è detta <strong>volatile</strong>.</p>
+<hr/>
+<p>All’interno della memoria di sistema è presente una sezione fondamentale: il <strong>BIOS (Basic Input/Output System)</strong>.</p>
+<p>Il BIOS contiene due fasi principali:</p>
+<ol>
+<li><strong>Bootstrap</strong> – avvia il sistema e immette sul bus le prime istruzioni necessarie per inizializzare i dispositivi di base;</li>
+<li><strong>POST (Power-On Self Test)</strong> – esegue i controlli di base e carica il sistema operativo.</li>
+</ol>
+<p>Le aree di memoria che contengono il BIOS e altri <strong>firmware</strong> sono realizzate in tecnologia <strong>ROM (Read Only Memory)</strong>, che è <strong>non volatile</strong>: mantiene i dati anche senza alimentazione.</p>
+<hr/>
+<p>Esistono due principali tipi di memoria RAM:</p>
+<ul>
+<li>
+<p><strong>DRAM (Dynamic RAM)</strong>: più lenta ma economica, utilizzata come memoria principale del sistema.</p>
+<p>I moduli DRAM sono installati negli <strong>slot DIMM</strong> della scheda madre.</p>
+</li>
+<li>
+<p><strong>SRAM (Static RAM)</strong>: più veloce ma anche molto più costosa.</p>
+<p>Per questo motivo è usata solo per memorie temporanee ad alte prestazioni, come la <strong>memoria cache</strong> del processore.</p>
+<h2 id="cache-e-gerarchie-di-memoria">Cache e Gerarchie di Memoria<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#cache-e-gerarchie-di-memoria" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La memoria principale (RAM) è molto più lenta rispetto al processore.</p>
+<p>Per ridurre questa latenza, si usano le <strong>cache</strong>, memorie piccole ma velocissime.</p>
+<h3 id="livelli-di-cache">Livelli di cache<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#livelli-di-cache" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>L1:</strong> la più veloce, ma piccola e dedicata a ciascun core.</li>
+<li><strong>L2:</strong> intermedia per velocità e capacità.</li>
+<li><strong>L3:</strong> condivisa tra i core, più grande ma più lenta.</li>
+</ul>
+<p>Quando un dato non è presente nella cache (<strong>cache miss</strong>), deve essere recuperato dalla RAM, rallentando l’esecuzione.</p>
+<h3 id="politiche-di-sostituzione">Politiche di sostituzione<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#politiche-di-sostituzione" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>LRU (Least Recently Used):</strong> rimuove il dato usato meno recentemente.</li>
+<li><strong>FIFO (First In, First Out):</strong> elimina il dato più vecchio.</li>
+<li><strong>Random:</strong> scelta casuale, utile quando si vuole semplicità di implementazione.</li>
+</ul>
+<hr/>
+<h2 id="memoria-virtuale">Memoria Virtuale<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#memoria-virtuale" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La <strong>memoria virtuale</strong> consente a ogni programma di vedere uno <strong>spazio di memoria continuo e più ampio</strong> rispetto a quello fisico disponibile utilizzando il disco fisso.</p>
+<p>Il sistema operativo traduce gli <strong>indirizzi virtuali</strong> in <strong>indirizzi fisici reali</strong> tramite la <strong>MMU (Memory Management Unit)</strong>.</p>
+<blockquote>
+<p>la memoria virtuale è più lenta rispetto alla RAM</p>
+</blockquote>
+<h3 id="tecniche-di-mappatura">Tecniche di mappatura<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#tecniche-di-mappatura" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p><strong>Paginazione:</strong> la memoria è divisa in blocchi di dimensione fissa (pagine).</p>
+</li>
+<li>
+<p><strong>Segmentazione:</strong> la memoria è suddivisa in segmenti logici di dimensione variabile.</p>
+</li>
+<li>
+<p><strong>Ibridi:</strong> combinano entrambi i metodi.</p>
+</li>
+</ul>
+<blockquote>
+<p>Grazie alla memoria virtuale, parte del disco può essere usata come memoria di supporto (swap).</p>
+</blockquote>
+<h2 id="cache-e-gerarchie-di-memoria-1">Cache e Gerarchie di Memoria<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#cache-e-gerarchie-di-memoria-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La memoria principale (RAM) è molto più lenta rispetto al processore.</p>
+<p>Per ridurre questa latenza, si usano le <strong>cache</strong>, memorie piccole ma velocissime.</p>
+<h3 id="livelli-di-cache-1">Livelli di cache<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#livelli-di-cache-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>L1:</strong> la più veloce, ma piccola e dedicata a ciascun core.</li>
+<li><strong>L2:</strong> intermedia per velocità e capacità.</li>
+<li><strong>L3:</strong> condivisa tra i core, più grande ma più lenta.</li>
+</ul>
+<p>Quando un dato non è presente nella cache (<strong>cache miss</strong>), deve essere recuperato dalla RAM, rallentando l’esecuzione.</p>
+<h3 id="politiche-di-sostituzione-1">Politiche di sostituzione<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#politiche-di-sostituzione-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>LRU (Least Recently Used):</strong> rimuove il dato usato meno recentemente.</li>
+<li><strong>FIFO (First In, First Out):</strong> elimina il dato più vecchio.</li>
+<li><strong>Random:</strong> scelta casuale, utile quando si vuole semplicità di implementazione.</li>
+</ul>
+<hr/>
+<h2 id="memoria-virtuale-1">Memoria Virtuale<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#memoria-virtuale-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La <strong>memoria virtuale</strong> consente a ogni programma di vedere uno <strong>spazio di memoria continuo e più ampio</strong> rispetto a quello fisico disponibile utilizzando il disco fisso.</p>
+<p>Il sistema operativo traduce gli <strong>indirizzi virtuali</strong> in <strong>indirizzi fisici reali</strong> tramite la <strong>MMU (Memory Management Unit)</strong>.</p>
+<blockquote>
+<p>la memoria virtuale è più lenta rispetto alla RAM</p>
+</blockquote>
+<h3 id="tecniche-di-mappatura-1">Tecniche di mappatura<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#tecniche-di-mappatura-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p><strong>Paginazione:</strong> la memoria è divisa in blocchi di dimensione fissa (pagine).</p>
+</li>
+<li>
+<p><strong>Segmentazione:</strong> la memoria è suddivisa in segmenti logici di dimensione variabile.</p>
+</li>
+<li>
+<p><strong>Ibridi:</strong> combinano entrambi i metodi.</p>
+</li>
+</ul>
+<blockquote>
+<p>Grazie alla memoria virtuale, parte del disco può essere usata come memoria di supporto (swap).</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="bus">BUS<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#bus" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>Il <strong>bus</strong> è un insieme di fili (chiamati <em>linee</em>) che collegano tra loro le varie parti del computer:</p>
+<ul>
+<li>il <strong>processore (CPU)</strong>,</li>
+<li>la <strong>memoria</strong>,</li>
+<li>e i <strong>dispositivi di input/output (I/O)</strong>.</li>
+</ul>
+<p>In pratica, è come una <strong>strada a più corsie</strong> su cui viaggiano i dati.</p>
+<p>Ogni filo del bus trasporta un bit (0 o 1).</p>
+<p>Tutti i componenti principali del computer “si affacciano” su questa strada per leggere, scrivere o scambiare informazioni.</p>
+<p>Il <strong>modello di von Neumann</strong> prevede che:</p>
+<ul>
+<li>i dati e le istruzioni risiedano in memoria,</li>
+<li>il processore li legga, li elabori e li riscriva,</li>
+<li>e che tutto questo avvenga tramite il <strong>bus</strong>.</li>
+</ul>
+<p>Quindi, la maggior parte delle operazioni di un computer sono <strong>trasferimenti di bit</strong> tra CPU, memoria e dispositivi di I/O.</p>
+<p>il <strong>processore</strong> è il <strong>Master</strong> (cioè quello che comanda),</p>
+<p>mentre <strong>memoria</strong> e <strong>I/O</strong> sono gli <strong>Slave</strong> (cioè quelli che eseguono le richieste).</p>
+<p>Il bus è il “mezzo di trasporto” che collega tutto.</p>
+<p>Ci sono due tipi principali di trasferimenti:</p>
+<ul>
+<li><strong>Scrittura (Write)</strong>: il processore invia dati alla memoria o ai dispositivi di I/O.</li>
+<li><strong>Lettura (Read)</strong>: il processore riceve dati dalla memoria o dagli I/O.</li>
+</ul>
+<p>Per gestire queste operazioni, il bus è diviso in <strong>tre sottoblocchi</strong> principali:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>Tipo di Bus</th><th>Nome</th><th>Funzione</th></tr></thead><tbody><tr><td>Bus degli indirizzi</td><td><strong>Address Bus (ABus)</strong></td><td>Specifica <em>dove</em> leggere o scrivere in memoria.</td></tr><tr><td>Bus dei dati</td><td><strong>Data Bus (DBus)</strong></td><td>Trasporta <em>i dati veri e propri</em>.</td></tr><tr><td>Bus di controllo</td><td><strong>Control Bus (CBus)</strong></td><td>Indica <em>cosa fare</em> e <em>quando</em> (es. leggere, scrivere, fine operazione).</td></tr></tbody></table></div>
+<p>Il <strong>Control Bus</strong> contiene linee che dicono:</p>
+<ul>
+<li>se l’operazione è <strong>tra memoria e CPU</strong> oppure <strong>tra I/O e CPU</strong>;</li>
+<li>se è una <strong>lettura (R/W = 1)</strong> o <strong>scrittura (R/W = 0)</strong>;</li>
+<li>se il trasferimento è <strong>finito (Wait = 1)</strong> o <strong>in corso (Wait = 0)</strong>.</li>
+</ul>
+<p>Il bus ha anche un <strong>clock</strong> (una specie di metronomo) che regola il tempo dei trasferimenti.</p>
+<p>Tutto avviene in modo <strong>sincronizzato</strong>: prima si indica l’indirizzo, poi il tipo di operazione, poi si inviano o ricevono i dati.</p>
+<p>Il segnale <em>Wait</em> serve perché la <strong>memoria è più lenta</strong> della CPU → questo crea il famoso <strong>collo di bottiglia di von Neumann</strong>: la CPU deve aspettare la memoria.</p>
+<p>Ogni bus ha un certo numero di linee (fili).</p>
+<ul>
+<li>
+<p>L’<strong>Address Bus</strong> determina <strong>quanta memoria può essere indirizzata</strong>.</p>
+<p>Esempio: con 16 linee si possono indirizzare <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">65.536</span><span class="mclose">)</span></span></span></span> locazioni (cioè 64 KB).</p>
+</li>
+<li>
+<p>Il <strong>Data Bus</strong> indica <strong>quanti bit si possono trasferire per volta</strong> (cioè il “grado di parallelismo”).</p>
+<p>Esempio: un DBus a 32 linee trasferisce 32 bit (4 byte) alla volta.</p>
+</li>
+</ul>
+<p>Sulla <strong>scheda madre</strong> del computer il bus di sistema è realizzato dal <strong>Chipset</strong>, cioè un insieme di circuiti che collegano tutto.</p>
+<p>Si divide in due parti:</p>
+<ul>
+<li><strong>NorthBridge</strong> → collega la CPU con la memoria e la scheda video.</li>
+<li><strong>SouthBridge</strong> → collega la CPU con le periferiche (tastiera, USB, disco, ecc.).</li>
+</ul>
+<p>Nel tempo i bus sono diventati sempre più veloci:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>Standard</th><th>Larghezza</th><th>Frequenza</th><th>Note</th></tr></thead><tbody><tr><td><strong>ISA</strong></td><td>8 bit</td><td>8,33 MHz</td><td>Bus storico, lento</td></tr><tr><td><strong>EISA</strong></td><td>16 bit</td><td>8,33 MHz</td><td>Migliorato ma ancora lento</td></tr><tr><td><strong>PCI</strong></td><td>32 bit</td><td>33 MHz</td><td>Bus standard per anni</td></tr><tr><td><strong>PCI-X</strong></td><td>32–64 bit</td><td>66 MHz</td><td>Fino a 1 GB/s</td></tr><tr><td><strong>AGP</strong></td><td>dedicato alla scheda video</td><td></td><td></td></tr><tr><td><strong>PCI Express (PCIe)</strong></td><td>bus moderno e veloce</td><td>sostituisce AGP e PCI</td><td></td></tr></tbody></table></div>
+<p>Il numero di linee del bus <strong>non sempre coincide</strong> con la dimensione dell’architettura (32 o 64 bit), ma spesso è simile.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>Architettura</th><th>Address Bus</th><th>Memoria indirizzabile</th><th>Data Bus</th><th>Dati per trasferimento</th></tr></thead><tbody><tr><td><strong>32 bit</strong></td><td>32 linee</td><td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">4</span><span class="mord mathnormal" style="margin-right:0.05017em;">GB</span></span></span></span></td><td>32 linee</td><td>4 byte</td></tr><tr><td><strong>64 bit</strong></td><td>64 linee</td><td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">64</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">16</span><span class="mspace"> </span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">ab</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span></span></span></span></td><td>64 linee</td><td>8 byte</td></tr></tbody></table></div>
+<p>Non sempre serve avere tutte le linee teoriche.</p>
+<p>Per esempio, un processore <strong>a 64 bit</strong> può avere <strong>solo 48 linee di indirizzi</strong>, sufficienti per gestire 256 TB di memoria fisica.</p>
+<p>Le scelte su quanti fili usare dipendono da:</p>
+<ul>
+<li><strong>efficienza</strong>,</li>
+<li><strong>costi</strong>,</li>
+<li>e <strong>requisiti del sistema</strong>.</li>
+</ul>
+<h1 id="io">I/O<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#io" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>La sezione <strong>Input/Output (I/O)</strong> di un computer serve per:</p>
+<ul>
+<li><strong>acquisire</strong> dati e programmi dall’esterno (input);</li>
+<li><strong>rappresentare</strong> i risultati delle elaborazioni (output).</li>
+</ul>
+<p>Le forme di rappresentazione sono molteplici: sullo schermo, tramite la stampante, o come dati memorizzati su dispositivi di massa (hard disk, DVD, pendrive, ecc.).</p>
+<hr/>
+<p>Dal punto di vista concettuale, la sezione di I/O si può immaginare come una <strong>memoria con celle</strong>, ma con uno <strong>spazio di indirizzamento separato e più piccolo</strong> rispetto alla memoria principale.</p>
+<p>Ogni dispositivo di I/O (come tastiera, monitor o stampante) possiede:</p>
+<ul>
+<li>un proprio <strong>intervallo di indirizzi</strong> riservato, chiamato <strong>registri di I/O</strong> o <strong>porte di I/O</strong>;</li>
+<li>questi indirizzi servono al processore per comunicare con quella specifica periferica.</li>
+</ul>
+<hr/>
+<p>Alcuni dispositivi richiedono un grande spazio di I/O e utilizzano <strong>indirizzi di memoria normali</strong> invece degli indirizzi di I/O.</p>
+<p>In questo caso si parla di <strong>dispositivi mappati in memoria (Memory-Mapped I/O)</strong>.</p>
+<p>Questa tecnica permette di trattare la periferica come se fosse una parte della memoria principale, semplificando le operazioni di lettura e scrittura.</p>
+<hr/>
+<p>Per gestire in modo efficiente la comunicazione tra CPU e periferiche, esistono <strong>linee di sincronizzazione dedicate</strong>, chiamate <strong>linee di interruzione</strong> o <strong>interrupt</strong>.</p>
+<p>Sul <strong>Control Bus (CBus)</strong> sono presenti due segnali principali:</p>
+<ul>
+<li><strong>INTR</strong>: richiesta di interruzione da parte di una periferica;</li>
+<li><strong>INTA</strong>: risposta del processore che accetta e gestisce l’interruzione.</li>
+</ul>
+<p>Quando arriva un interrupt, il processore sospende temporaneamente ciò che sta facendo per eseguire una <strong>procedura specifica</strong> chiamata <strong>ISR (Interrupt Service Routine)</strong>.</p>
+<p>Questo meccanismo è essenziale per i dispositivi che funzionano in modo <strong>asincrono</strong>, cioè che possono richiedere attenzione in qualsiasi momento (come il mouse o la tastiera).</p>
+<hr/>
+<p>Non sempre conviene che il processore gestisca direttamente ogni trasferimento di I/O, perché ciò rallenterebbe l’esecuzione.</p>
+<p>Per questo motivo esistono modalità speciali:</p>
+<ul>
+<li><strong>DMA (Direct Memory Access)</strong>: il trasferimento dei dati avviene direttamente tra la memoria e la periferica, senza coinvolgere la CPU.</li>
+<li><strong>Bus Mastering</strong>: una variante del DMA in cui la periferica può diventare “padrone del bus” per un certo tempo e gestire i trasferimenti autonomamente.</li>
+</ul>
+<p>Queste tecniche permettono di spostare grandi quantità di dati senza occupare la CPU.</p>
+<hr/>
+<p>Ogni periferica dispone di una circuiteria chiamata <strong>scheda controller</strong>, che ha il compito di:</p>
+<ul>
+<li>collegarsi al bus di sistema;</li>
+<li>gestire i propri indirizzi di I/O;</li>
+<li>sincronizzare i trasferimenti tramite il Control Bus;</li>
+<li>gestire eventuali linee di interrupt o DMA.</li>
+</ul>
+<p>Le periferiche interne (come scheda video, rete, tastiera) hanno la scheda controller <strong>integrata nel Chipset</strong> della scheda madre.</p>
+<p>Esistono anche <strong>controller dedicati</strong> per gestire in modo centralizzato le interruzioni e il DMA: l’<strong>Interrupt Controller</strong> e il <strong>DMA Controller</strong>.</p>
+<hr/>
+<p>Con l’introduzione del <strong>bus PCI</strong>, che collega CPU, memoria e I/O attraverso il <strong>SouthBridge</strong>, si è semplificata la gestione degli indirizzi e dei canali DMA.</p>
+<p>Prima del PCI, le schede controller dovevano essere <strong>configurate manualmente</strong> (tramite ponticelli o interruttori) per assegnare indirizzi, linee di interrupt e canali DMA, evitando conflitti con altre schede.</p>
+<p>Il PCI ha introdotto la tecnologia <strong>Plug &amp; Play</strong>, grazie alla quale:</p>
+<ul>
+<li>il BIOS, il sistema operativo e il firmware della scheda controller stabiliscono automaticamente gli indirizzi e le linee di comunicazione;</li>
+<li>l’utente non deve più configurare manualmente i dispositivi;</li>
+<li>è possibile collegare dispositivi “a caldo” (senza spegnere il computer).</li>
+</ul>
+<hr/>
+<p>Le <strong>periferiche esterne</strong> si collegano al bus del sistema tramite <strong>connettori standard</strong>.</p>
+<p>Esempi:</p>
+<ul>
+<li><strong>Slot PCI o PCIe</strong>: per collegare schede aggiuntive (come una seconda scheda di rete o una scheda audio dedicata);</li>
+<li><strong>Connessioni IDE/EIDE (ATA-ATA2)</strong>: usate in passato per hard disk e DVD, oggi quasi del tutto sostituite da interfacce più moderne.</li>
+</ul>
+<hr/>
+<p>Gli standard moderni per il collegamento dei dispositivi di I/O sono:</p>
+<ul>
+<li><strong>USB (Universal Serial Bus)</strong>: consente il collegamento e l’installazione “a caldo” (Hot Swap), supporta alte velocità (480 Mbit/s per USB 2.0) e fornisce alimentazione ai dispositivi;</li>
+<li><strong>FireWire (IEEE 1394)</strong>: simile all’USB, con velocità di 400 Mbit/s e possibilità di connessioni multiple in cascata;</li>
+<li><strong>Ethernet (802.x)</strong>: standard per la rete locale.</li>
+</ul>
+<p>Gli standard più vecchi come <strong>RS232</strong>, <strong>porte parallele Centronics</strong> e <strong>PS/2</strong> sono stati progressivamente abbandonati o convertiti in connessioni USB.</p>
+<h1 id="processore">PROCESSORE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#processore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>Un <strong>processore (CPU – Central Processing Unit)</strong> è un <strong>circuito integrato</strong> in grado di eseguire operazioni logiche, aritmetiche e di controllo sui dati.</p>
+<p>È composto da varie <strong>unità funzionali</strong>, ciascuna con un ruolo specifico.</p>
+<hr/>
+<h3 id="componenti-principali">COMPONENTI PRINCIPALI<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#componenti-principali" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p><strong>Registri:</strong> piccole memorie interne alla CPU, molto veloci, che contengono temporaneamente dati e indirizzi.</p>
+<p>Servono per trasferire i dati all’interno del processore, in particolare verso l’<strong>ALU</strong> (Arithmetic Logic Unit) per l’elaborazione.</p>
+</li>
+<li>
+<p><strong>ALU (Arithmetic Logic Unit):</strong> esegue operazioni <strong>aritmetiche</strong> (addizione, sottrazione, moltiplicazione, divisione) e <strong>logiche</strong> (AND, OR, NOT, XOR).</p>
+<p>È l’unità di esecuzione effettiva del processore.</p>
+</li>
+<li>
+<p><strong>Unità di controllo (Control Unit):</strong> gestisce il flusso delle istruzioni, decodifica gli <strong>opcode</strong>, coordina le operazioni tra registri, ALU e memoria.</p>
+</li>
+<li>
+<p><strong>Program Counter (PC):</strong> registro speciale che contiene l’indirizzo dell’<strong>istruzione successiva</strong> da eseguire. Dopo ogni istruzione, viene <strong>incrementato automaticamente</strong> della lunghezza dell’istruzione appena completata.</p>
+</li>
+</ul>
+<hr/>
+<h3 id="data-path">DATA PATH<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#data-path" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Il <strong>data path</strong> rappresenta il percorso che i dati compiono all’interno del processore:
+<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Registri</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Registri di input</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">ALU</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Registro di output</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">re</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span></span></span></span></p>
+<p>Questo ciclo consente il trasferimento e l’elaborazione continua delle informazioni.</p>
+<hr/>
+<h2 id="ciclo-di-istruzione-del-processore">CICLO DI ISTRUZIONE DEL PROCESSORE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#ciclo-di-istruzione-del-processore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Il processore opera secondo una <strong>sequenza ciclica di fasi</strong>, nota come <strong>FETCH – DECODE – EXECUTE – STORE</strong>:</p>
+<ol>
+<li>
+<p><strong>FETCH (Prelievo):</strong></p>
+<p>L’unità di controllo pone sul <strong>bus degli indirizzi (Address Bus)</strong> il valore contenuto nel <strong>Program Counter</strong>, per leggere dalla memoria l’istruzione da eseguire.</p>
+<p>L’<strong>opcode (Operation Code)</strong> dell’istruzione viene caricato nel registro istruzioni (Instruction Register).</p>
+</li>
+<li>
+<p><strong>DECODE (Decodifica):</strong></p>
+<p>L’unità di controllo <strong>interpreta l’Op.code</strong>, determinando <strong>quali operandi servono</strong> e <strong>quale operazione</strong> eseguire.</p>
+<p>In questa fase vengono caricati gli <strong>operandi</strong> dai registri o dalla memoria (<strong>Operand Fetch</strong>).</p>
+</li>
+<li>
+<p><strong>EXECUTE (Esecuzione):</strong></p>
+<p>L’ALU o un’unità funzionale specializzata <strong>esegue l’operazione richiesta</strong> sull’input.</p>
+<p>La velocità di questa fase dipende dal <strong>clock della CPU</strong>, che regola la frequenza di esecuzione dei microprogrammi.</p>
+</li>
+<li>
+<p><strong>STORE (Memorizzazione):</strong></p>
+<p>I risultati dell’operazione vengono <strong>memorizzati</strong> nei registri o <strong>scritti in memoria</strong> (tramite il <strong>bus dei dati</strong>) oppure inviati ai dispositivi di I/O.</p>
+</li>
+</ol>
+<hr/>
+<h2 id="tipologie-di-architettura">TIPOLOGIE DI ARCHITETTURA<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#tipologie-di-architettura" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="cisc-complex-instruction-set-computer">CISC (Complex Instruction Set Computer)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#cisc-complex-instruction-set-computer" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>Ogni istruzione può eseguire <strong>operazioni complesse</strong> (ad esempio accesso in memoria + calcolo + memorizzazione).</li>
+<li>Le istruzioni sono <strong>numerose e variabili in lunghezza</strong>, quindi la fase di <strong>decodifica è complessa</strong>.</li>
+<li>Richiede un <strong>data path a più cicli</strong> per completare l’esecuzione di un’istruzione.</li>
+<li>È più <strong>compatibile e portabile</strong> a livello software: lo stesso codice Assembly può essere usato su CPU successive.</li>
+<li>Esempi: <strong>Intel x86, AMD64</strong>.</li>
+</ul>
+<h3 id="risc-reduced-instruction-set-computer">RISC (Reduced Instruction Set Computer)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#risc-reduced-instruction-set-computer" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>Utilizza un <strong>insieme ridotto e uniforme di istruzioni</strong>, generalmente di <strong>lunghezza fissa (es. 32 bit)</strong>.</li>
+<li>Ogni istruzione viene <strong>eseguita in un solo ciclo di clock</strong>, con un <strong>data path a singolo passo</strong>.</li>
+<li>L’esecuzione è più <strong>rapida e prevedibile</strong>.</li>
+<li>Per eseguire un’operazione complessa serve una <strong>sequenza di più istruzioni semplici</strong>.</li>
+<li>Esempi: <strong>ARM, MIPS, RISC-V, SPARC</strong>.</li>
+</ul>
+<p><strong>Differenze principali:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>Caratteristica</th><th>CISC</th><th>RISC</th></tr></thead><tbody><tr><td>Numero di istruzioni</td><td>Alto</td><td>Basso</td></tr><tr><td>Lunghezza istruzione</td><td>Variabile</td><td>Fissa</td></tr><tr><td>Fasi per istruzione</td><td>Più cicli</td><td>Un solo ciclo</td></tr><tr><td>Decodifica</td><td>Complessa</td><td>Semplice</td></tr><tr><td>Velocità media</td><td>Inferiore</td><td>Maggiore</td></tr><tr><td>Esempi</td><td>x86, 68000</td><td>ARM, RISC-V</td></tr></tbody></table></div>
+<h3 id="sistema-di-cache"><strong>Sistema di Cache</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#sistema-di-cache" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Per evitare il <em>bottleneck</em> dovuto alla lentezza della memoria principale rispetto alla CPU, si utilizza un sistema di <strong>cache</strong>.</p>
+<p>Quando la CPU legge un indirizzo dalla memoria, gli indirizzi successivi vengono memorizzati nella cache.</p>
+<p>Questo avviene tramite un <strong>bus dedicato</strong>, molto più veloce rispetto al bus della memoria principale (più lunga è la linea del bus, minore è la velocità di trasmissione).</p>
+<p>Il funzionamento può essere riassunto così:</p>
+<ol>
+<li>La CPU cerca il dato <strong>prima nella cache</strong>.</li>
+<li>Se il dato <strong>non è presente</strong> (<em>cache miss</em>), viene letto dalla memoria principale.</li>
+<li>Il dato viene quindi <strong>copiato nella cache</strong>, eventualmente <strong>rimpiazzando</strong> la linea meno utilizzata (<em>Least Recently Used – LRU</em>).</li>
+</ol>
+<h3 id="livelli-di-cache-2">Livelli di cache:<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#livelli-di-cache-2" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li><strong>Cache L1</strong> → all’interno della CPU (la più veloce, ma più piccola)</li>
+<li><strong>Cache L2</strong> → collegata alla CPU (più grande, ma leggermente più lenta)</li>
+<li><strong>Cache L3</strong> → condivisa, collegata alla scheda madre (ancora più grande, ma meno veloce)</li>
+</ul>
+<hr/>
+<h3 id="prefetch"><strong>Prefetch</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#prefetch" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Fin dalle prime CPU, si è introdotto il <strong>prefetch</strong>:</p>
+<p>la CPU preleva e memorizza in anticipo alcuni byte (ad esempio 6 o 8) successivi a quelli richiesti, in modo da <strong>anticipare l’uso futuro dei dati</strong> e <strong>ridurre l’accesso al bus</strong>.</p>
+<p>Questo meccanismo aumenta la probabilità che le istruzioni necessarie siano già disponibili nella cache.</p>
+<hr/>
+<h3 id="superscalar-architecture"><strong>Superscalar Architecture</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#superscalar-architecture" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Un processore con <strong>più ALU (Arithmetic Logic Unit)</strong> può gestire più pipeline contemporaneamente:</p>
+<p>→ questo tipo di architettura si chiama <strong>superscalare</strong>.</p>
+<hr/>
+<h3 id="architetture-cisc-e-ibridi-moderni"><strong>Architetture CISC e ibridi moderni</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#architetture-cisc-e-ibridi-moderni" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>I processori <strong>Intel i7</strong> e <strong>i9</strong> appartengono alla famiglia <strong>CISC (Complex Instruction Set Computer)</strong>,</p>
+<p>ma internamente sono <strong>ibridi</strong>, poiché utilizzano una microarchitettura <strong>RISC-like</strong> per ottimizzare l’esecuzione delle istruzioni complesse.</p>
+<h1 id="livello-software">LIVELLO SOFTWARE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#livello-software" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<h2 id="il-processo-di-programmazione-e-traduzione">Il Processo di Programmazione e Traduzione<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#il-processo-di-programmazione-e-traduzione" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="livelli-di-linguaggio">Livelli di Linguaggio<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#livelli-di-linguaggio" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>I programmi sono scritti in <strong>Linguaggio ad Alto Livello</strong> (es. C, C++, ecc.), che è il più espressivo.</li>
+<li>Questo codice viene tradotto in <strong>Linguaggio macchina assemblativo (Assembly)</strong>.</li>
+<li>Il linguaggio assemblativo viene infine tradotto in <strong>Linguaggio macchina binario</strong>.</li>
+</ul>
+<h3 id="strumenti-di-traduzione">Strumenti di Traduzione<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#strumenti-di-traduzione" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th><strong>Strumento</strong></th><th><strong>Trasformazione</strong></th><th><strong>Note</strong></th></tr></thead><tbody><tr><td><strong>Compilatore</strong></td><td>Codice ad Alto Livello → Codice Assemblativo</td><td>Automatizza molti compiti del programmatore assembly. Un compilatore che riorganizza le istruzioni è detto <strong>Ottimizzante</strong>.</td></tr><tr><td><strong>Assemblatore</strong></td><td>Codice Assemblativo → Codice Macchina Binario (File Oggetto)</td><td>Esegue passi come la generazione della codifica binaria e la gestione delle direttive di allocazione di memoria.</td></tr></tbody></table></div>
+<h2 id="generazione-del-programma-oggetto">Generazione del Programma Oggetto<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#generazione-del-programma-oggetto" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La generazione di un file eseguibile completo (Programma Oggetto) richiede la collaborazione di più strumenti.</p>
+<h3 id="flusso-di-lavoro">Flusso di Lavoro<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#flusso-di-lavoro" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>Compilatore</strong>: Trasforma i file sorgenti ad alto livello in file sorgenti assembly.</p>
+<p><strong>Assemblatore</strong>: Trasforma i file sorgenti assembly in <strong>File Oggetto</strong>.</p>
+<p><strong>Linker (Collegatore)</strong>: Collega assieme vari file oggetto e file di libreria in un unico <strong>Programma Oggetto</strong>.</p>
+<blockquote>
+<p>Il Ruolo del Linker e delle Librerie</p>
+<ul>
+<li>Quando un file sorgente chiama sottoprogrammi dichiarati altrove, l’assemblatore genera un file oggetto incompleto (con riferimenti a nomi esterni).</li>
+<li>Il Linker risolve questi riferimenti combinando più file oggetto separati.</li>
+<li>Le Librerie sono file che raggruppano file oggetto riutilizzabili e contengono le informazioni necessarie al Linker per risolvere i riferimenti a nomi esterni. Sono create dall’utility Archiver.</li>
+</ul>
+</blockquote>
+<h3 id="assemblatore-a-due-passate">Assemblatore a Due Passate<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#assemblatore-a-due-passate" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Si usa un metodo a 2 passate per gestire i simboli (es. etichette dei salti in avanti) che vengono usati prima di essere dichiarati.</p>
+<p><strong>Passo 1</strong>: Scorre il codice sorgente e raccoglie tutti i simboli e i rispettivi valori numerici nella <strong>tabella dei simboli.</strong></p>
+<p><strong>Passo 2</strong>: Scorre nuovamente il codice sorgente, sostituisce i simboli con i valori in tabella e genera il codice oggetto finale.</p>
+<h2 id="esecuzione-e-debug-del-programma">Esecuzione e Debug del Programma<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#esecuzione-e-debug-del-programma" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="loader-caricatore">Loader (Caricatore)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#loader-caricatore" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Il Loader è il programma che carica il programma oggetto dalla memoria secondaria (disco) alla <strong>memoria centrale</strong> per l’esecuzione.</p>
+<ul>
+<li>Legge informazioni (lunghezza e locazione di caricamento) dall’header del file oggetto.</li>
+<li>Carica il programma in memoria.</li>
+<li>Salta alla prima istruzione del programma da eseguire.</li>
+</ul>
+<h3 id="debugger">Debugger<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#debugger" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Il Debugger è un programma che consente di eseguire e interrompere il programma oggetto per controllare lo stato della memoria e dei registri e individuare errori di programmazione (bug).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th><strong>Modalità</strong></th><th><strong>Descrizione</strong></th><th><strong>Meccanismo</strong></th></tr></thead><tbody><tr><td><strong>Trace Mode</strong></td><td>Il programma viene eseguito <strong>passo-passo</strong>, interrompendosi dopo ogni istruzione.</td><td>Si genera un’eccezione al termine di ogni istruzione; il Debugger è la routine di servizio dell’interruzione.</td></tr><tr><td><strong>Breakpoint</strong></td><td>L’esecuzione si interrompe in punti di osservazione specifici definiti dal programmatore.</td><td>Il Debugger sostituisce temporaneamente le istruzioni nei punti di osservazione con speciali interruzioni software (<strong>Trap</strong>).</td></tr></tbody></table></div>
+<h2 id="il-sistema-operativo-so">Il Sistema Operativo (SO)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#il-sistema-operativo-so" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Il <strong>Sistema Operativo</strong> gestisce il coordinamento generale di tutte le attività del calcolatore.</p>
+<p><strong>Funzioni</strong>: Esecuzione concorrente di programmi, gestione degli I/O, gestione dell’accesso alla memoria, gestione dell’interfaccia utente, etc.</p>
+<p><strong>Struttura</strong>: Formato da un insieme di routine essenziali che risiedono nella memoria centrale e programmi di utilità che risiedono su disco.</p>
+<p><strong>Sistemi Multitasking</strong>: Sistemi operativi capaci di eseguire più programmi contemporaneamente (virtualmente).</p>
+<ul>
+<li><strong>Gestione Concorrente (Time Slicing)</strong>: Il SO divide l’esecuzione dei programmi in <strong>quanti di tempo</strong> (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span>). Un contatore lancia un’interruzione a intervalli regolari, attivando la routine <strong>SCHEDULER</strong> per scegliere il prossimo programma da eseguire.</li>
+</ul>
+<p><strong>Stati dei Programmi</strong>: <strong>RUNNING</strong>, <strong>RUNNABLE</strong> e <strong>BLOCKED</strong>.</p>
+<h1 id="pipeline">PIPELINE<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#pipeline" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>la pipeline serve a parallelizzare i processi della CPU durante l’esecuzione di un programma.</p>
+<p>il pipelining è una tecnica avanzata nei processori:</p>
+<p><img src="attachment:01f243a6-07fc-4a70-b8f8-1b78e8ab79cc:Schermata_del_2025-11-17_09-29-26.png" alt="Schermata del 2025-11-17 09-29-26.png"/></p>
+<p>il principio fondamentale è la parallelizzazione dei processi per ottimizzare tutti i processi in meno cicli di clock.</p>
+<p>gli stadi della pipeline sono:</p>
+<p>FETCH → DECODE →EXECUTE →MEMORY → WRITE</p>
+<p>nel caso migliore (senza cache miss) si hanno 5 istruzioni eseguite in parallelo</p>
+<p>per gestire l’esecuzione in pipeline di più istruzioni, è necessario mantenere informazioni tra uno stadio e l’altro.</p>
+<p>queste informazioni vengono mantenute nei buffer interstadi che contengono il dato tra uno stadio e l’altro della pipeline e contengono:</p>
+<ul>
+<li>i registri interstadio (RA,RB,PC_TEMP, etc..)</li>
+<li>il registro IR (per mantenere gli identificatori dei registri sorgente e destinazione)</li>
+<li>segnali di controllo per i vari stadi</li>
+</ul>
+<p>I PROBLEMI DEL PIPELINING:</p>
+<ul>
+<li>DATA HAZARD</li>
+<li>RITARDO ACCESSO MEMORIA</li>
+<li>RITARDO NEI SALTI</li>
+<li>LIMITE DI RISORSE</li>
+</ul>
+<h2 id="data-hazard">DATA HAZARD<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#data-hazard" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>un data hazard accade quando un istruzione contiene un registro sorgente che ancora non è stato aggiornato dalle istruzioni precedenti:</p>
+<p><img src="attachment:b4e6cc5b-d2ac-4d9c-9321-8dc897dfbf78:Schermata_20251119_113656.png" alt="Schermata_20251119_113656.png"/></p>
+<ul>
+<li>in questo caso l’istruzione ADD aggiornerà il contenuto di R2 alla fine della fase WRITE</li>
+<li>l’istruzione subtract legge il contenuto di R2 mentre si trova in fase di EXECUTE</li>
+<li>l’istruzione subtract resterà in stallo finché R2 non sarà aggiornato (3 cicli di clock)</li>
+</ul>
+<p>i vari tipi di data hazard sono:</p>
+<ul>
+<li>
+<p>RAW</p>
+<p>R2 legge il contenuto di R1 prima che l’istruzione su R1 abbia finito la fase MEMORY, andando a leggere un valore errato</p>
+</li>
+<li>
+<p>WAW</p>
+<p>istruzione i salva un operando in R3 prima che lo salvi istruzione j, lasciando così solo l’istruzione j</p>
+</li>
+<li>
+<p>WAR</p>
+<p>R1 viene cambiato nell’istruzione i e nell’istruzione j viene letto</p>
+</li>
+</ul>
+<h3 id="istruzioni-nop">ISTRUZIONI NOP<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#istruzioni-nop" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>per mettere un istruzione in stallo si utilizzano le istruzioni nop tra le due istruzioni.</p>
+<p>ciascuna NOP crea un ciclo di inattività chiamato <em>bolla.</em></p>
+<p>le istruzioni nulle possono essere generate via compilatore o via hardware tramite circuiti complessi.</p>
+<p>è una tecnica usata per evitare i ritardi causati dai data hazard, con questa tecnica indirizziamo direttamente gli operandi dell’istruzione precedente senza doverli pprima salvare in memoria</p>
+<p>i compilatori ottimizzanti possono spostare istruzioni utili nelle posizioni delle NOP</p>
+<h2 id="inoltro-degli-operatori-forwarding">INOLTRO DEGLI OPERATORI (FORWARDING)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#inoltro-degli-operatori-forwarding" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>pper risolvere il problema si ricorre all’operand forwarding dove alla fine di istruzioni 1 il dato viene rimandato direttamente alla ALU della prossima istruzione, saltando quindi il WRITEBACK e dei possibili stalli.</p>
+<p><img src="attachment:d6a80787-63e1-4e84-b80d-4542388bebde:Schermata_20251119_120258.png" alt="Schermata_20251119_120258.png"/></p>
+<p><img src="attachment:85957a6e-44f5-4732-8f3e-c4d3d888be76:Schermata_20251119_120249.png" alt="Schermata_20251119_120249.png"/></p>
+<h2 id="ritardi-della-memoria"><strong>Ritardi della memoria</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#ritardi-della-memoria" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Gli accessi alla memoria principale possono richiedere un numero di cicli di clock superiore a quello necessario per gli accessi alla cache. Nei casi di <em>cache miss</em>, il dato richiesto non risiede nella cache e deve essere recuperato dalla memoria centrale, introducendo ritardi dell’ordine di dieci o più cicli di clock.</p>
+<p>Poiché la pipeline è organizzata in stadi sequenziali, un’istruzione che permane nello stadio di accesso alla memoria impedisce l’avanzamento delle istruzioni successive, causando un blocco globale della pipeline per tutta la durata del ritardo.</p>
+<hr/>
+<h2 id="ritardi-nei-salti"><strong>Ritardi nei salti</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#ritardi-nei-salti" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Le istruzioni di salto condizionato e incondizionato producono una deviazione del normale flusso di esecuzione. Nel modello classico a cinque stadi, l’indirizzo di destinazione del salto viene determinato nello stadio di esecuzione (<em>Execution</em>). Tale ritardo implica che le due istruzioni che entrano nella pipeline immediatamente dopo il salto siano state già prelevate e debbano essere scartate.</p>
+<p>La penalità associata corrisponde quindi a due cicli di clock per ogni salto preso. Lo stesso meccanismo si applica ai salti condizionati la cui condizione risulta vera.</p>
+<hr/>
+<h2 id="riduzione-della-penalità-di-salto"><strong>Riduzione della penalità di salto</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#riduzione-della-penalità-di-salto" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La penalità può essere ridotta spostando al secondo stadio della pipeline (Decodifica) sia il calcolo dell’indirizzo di salto, mediante l’introduzione di un sommatore dedicato, sia la valutazione della condizione di salto, mediante il trasferimento del comparatore allo stesso stadio.</p>
+<p>In questo modo, l’indirizzo di destinazione è determinato con un ciclo di anticipo rispetto al modello tradizionale, riducendo la penalità del salto a un singolo ciclo di clock.</p>
+<hr/>
+<h2 id="salto-differito-delayed-branch"><strong>Salto differito (Delayed Branch)</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#salto-differito-delayed-branch" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Nel modello a salto differito, l’istruzione immediatamente successiva al salto viene sempre eseguita, indipendentemente dall’esito della condizione di salto. In questo contesto, l’istruzione collocata nello <em>slot</em> successivo al salto viene denominata <em>delay slot</em>.</p>
+<p>Il compilatore ha il compito di individuare un’istruzione semanticamente valida da collocare nel <em>delay slot</em>, al fine di evitare l’inserimento di istruzioni nulle (<em>NOP</em>). Qualora non sia possibile individuare una tale istruzione, viene inserita una <em>NOP</em>, mantenendo comunque una riduzione della penalità rispetto allo scarto delle istruzioni.</p>
+<hr/>
+<h2 id="predizione-dei-salti"><strong>Predizione dei salti</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#predizione-dei-salti" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La predizione dei salti ha l’obiettivo di ridurre l’impatto dei ritardi di salto prevedendo anticipatamente l’esito di un’istruzione di salto e consentendo il prelievo dell’istruzione corretta senza attendere la valutazione della condizione.</p>
+<h3 id="predizione-statica"><strong>Predizione statica</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#predizione-statica" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>La predizione statica si basa su strategie fisse, quali:</p>
+<ul>
+<li>presumere che il salto non venga effettuato;</li>
+<li>presumere che i salti all’indietro siano presi e quelli in avanti non presi;</li>
+<li>utilizzare un bit di predizione incorporato nell’istruzione.</li>
+</ul>
+<p>Questi metodi presentano complessità ridotta ma accuratezza limitata.</p>
+<h3 id="predizione-dinamica"><strong>Predizione dinamica</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#predizione-dinamica" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>La predizione dinamica utilizza il comportamento storico di ciascun salto per migliorare l’accuratezza.</p>
+<p>Modelli tipici includono:</p>
+<ul>
+<li>predittori a due stati, con stati “probabilmente salta” e “probabilmente non salta”;</li>
+<li>predittori a quattro stati, che introducono i livelli “molto probabilmente salta” e “molto probabilmente non salta”.</li>
+</ul>
+<p>L’impiego dei predittori a più stati riduce la sensibilità agli errori sporadici e incrementa l’accuratezza della predizione.</p>
+<hr/>
+<h2 id="buffer-di-destinazione-di-salto-branch-target-buffer"><strong>Buffer di destinazione di salto (Branch Target Buffer)</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#buffer-di-destinazione-di-salto-branch-target-buffer" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Per consentire la predizione sin dallo stadio di prelievo (<em>Fetch</em>), è utilizzata una memoria veloce denominata <em>Branch Target Buffer</em> (BTB). Essa contiene per ciascun salto:</p>
+<ul>
+<li>l’indirizzo dell’istruzione di salto;</li>
+<li>uno o più bit di predizione relativi all’algoritmo adottato;</li>
+<li>l’indirizzo di destinazione.</li>
+</ul>
+<p>Durante il prelievo, se l’indirizzo dell’istruzione corrisponde a una voce nel BTB, il valore memorizzato viene utilizzato per aggiornare immediatamente il Program Counter. Qualora la tabella non possa contenere tutte le istruzioni di salto del programma, viene aggiornata dinamicamente sulla base dell’esecuzione.</p>
+<hr/>
+<h2 id="limiti-di-risorse"><strong>Limiti di risorse</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#limiti-di-risorse" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>La pipeline può andare incontro a blocchi quando più istruzioni richiedono l’uso simultaneo di una risorsa hardware condivisa. Un esempio tipico riguarda le cache unificate: durante il prelievo dell’istruzione, un accesso simultaneo alla memoria per operazioni di <em>load</em> o <em>store</em> può causare uno stallo.</p>
+<p>Una soluzione efficace consiste nell’adozione di cache separate per istruzioni e dati, riducendo il conflitto di accesso.</p>
+<hr/>
+<h2 id="valutazione-delle-prestazioni"><strong>Valutazione delle prestazioni</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#valutazione-delle-prestazioni" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="modello-senza-pipeline"><strong>Modello senza pipeline</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#modello-senza-pipeline" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Il tempo di esecuzione di un programma è:</p>
+<p>[</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="mbin mtight">⋅</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>]</p>
+<p>dove:</p>
+<ul>
+<li>(N) è il numero di istruzioni,</li>
+<li>(S) è il numero medio di cicli per istruzione (<em>CPI</em>),</li>
+<li>(R) è la frequenza di clock.</li>
+</ul>
+<h3 id="modello-con-pipeline"><strong>Modello con pipeline</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#modello-con-pipeline" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>In condizioni ideali, il throughput della pipeline è:</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></p>
+<p>ossia una istruzione completata per ciclo.</p>
+<h3 id="effetto-dei-conflitti"><strong>Effetto dei conflitti</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#effetto-dei-conflitti" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>I conflitti introducono un incremento del CPI. Per ciascuna categoria di conflitto si definisce una penalità:</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></p>
+<p>dove:</p>
+<ul>
+<li>(p) è la probabilità del verificarsi del conflitto,</li>
+<li>(c) è il numero medio di cicli di stallo introdotti.</li>
+</ul>
+<p>Il CPI effettivo diventa:</p>
+<p><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0379em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0379em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">lt</span><span class="mord mathnormal mtight">o</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0379em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">mi</span><span class="mord mathnormal mtight">ss</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+<hr/>
+<h2 id="processori-superscalari"><strong>Processori superscalari</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#processori-superscalari" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>I processori superscalari possono emettere più istruzioni per ciclo, sfruttando la presenza di più unità funzionali organizzate in pipeline indipendenti.</p>
+<h3 id="componenti-principali-1"><strong>Componenti principali</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#componenti-principali-1" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>unità di prelievo con coda di istruzioni;</li>
+<li>unità di smistamento (<em>dispatch</em>) con stazioni di prenotazione;</li>
+<li>unità di esecuzione parallele;</li>
+<li>registri temporanei;</li>
+<li>unità di <em>commit</em> con buffer di riordino.</li>
+</ul>
+<p>Le istruzioni possono essere inviate in esecuzione quando le risorse e gli operandi necessari risultano disponibili.</p>
+<hr/>
+<h2 id="dipendenze-di-dato-e-stazioni-di-prenotazione"><strong>Dipendenze di dato e stazioni di prenotazione</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#dipendenze-di-dato-e-stazioni-di-prenotazione" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Per ogni unità di esecuzione è presente una stazione di prenotazione che contiene:</p>
+<ul>
+<li>l’istruzione in attesa di esecuzione,</li>
+<li>gli operandi o i riferimenti ai registri temporanei che li conterranno,</li>
+<li>eventuali informazioni di controllo.</li>
+</ul>
+<p>Un’istruzione è resa disponibile all’esecuzione solo quando tutti gli operandi sono stati prodotti. Le unità produttori distribuiscono i risultati alle stazioni di prenotazione tramite meccanismi di inoltro dei dati.</p>
+<hr/>
+<h2 id="esecuzione-fuori-ordine"><strong>Esecuzione fuori ordine</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#esecuzione-fuori-ordine" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Per mitigare l’impatto degli stalli dovuti a <em>cache miss</em> o eccezioni, è consentita l’esecuzione delle istruzioni in un ordine diverso rispetto a quello del prelievo, purché ciò non alteri la semantica del programma.</p>
+<h3 id="ridenominazione-dei-registri"><strong>Ridenominazione dei registri</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#ridenominazione-dei-registri" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>I risultati delle unità funzionali non vengono scritti direttamente nei registri architetturali ma in registri temporanei, prevenendo conflitti di nome e garantendo la correttezza delle dipendenze tra istruzioni.</p>
+<h3 id="buffer-di-riordino-reorder-buffer"><strong>Buffer di riordino (Reorder Buffer)</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#buffer-di-riordino-reorder-buffer" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>L’unità di <em>commit</em> trasferisce i risultati dai registri temporanei a quelli architetturali secondo l’ordine originale, garantendo precisione nelle eccezioni e consistenza dello stato del processore.</p>
+<hr/>
+<h2 id="pipeline-nei-processori-cisc"><strong>Pipeline nei processori CISC</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#pipeline-nei-processori-cisc" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Le architetture CISC presentano sfide specifiche nella realizzazione di pipeline, dovute a:</p>
+<ul>
+<li>complessità del formato delle istruzioni,</li>
+<li>molteplicità dei modi di indirizzamento,</li>
+<li>uso di operandi in memoria,</li>
+<li>presenza di flag di stato.</li>
+</ul>
+<h3 id="soluzione-nei-processori-intel-core-i7"><strong>Soluzione nei processori Intel Core i7</strong><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#soluzione-nei-processori-intel-core-i7" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>I processori Intel Core i7 adottano:</p>
+<ul>
+<li>pipeline molto profonde (14 stadi),</li>
+<li>emissione multipla fino a quattro istruzioni per ciclo,</li>
+<li>traduzione dinamica delle istruzioni CISC in <em>micro-operazioni</em> interne di tipo RISC.</li>
+</ul>
+<p>Le micro-operazioni vengono quindi eseguite dalle unità funzionali superscalari secondo logiche di esecuzione e riordino analoghe a quelle descritte in precedenza.</p>
+<hr/>
+<h1 id="struttura-base-cpu">STRUTTURA BASE CPU<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#struttura-base-cpu" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-1" aria-expanded="true"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul id="list-1" class="toc-content overflow"><li class="depth-0"><a href="#indice" data-for="indice">Indice</a></li><li class="depth-0"><a href="#introduzione" data-for="introduzione">INTRODUZIONE</a></li><li class="depth-1"><a href="#il-processore" data-for="il-processore">IL PROCESSORE</a></li><li class="depth-1"><a href="#la-memoria-centrale" data-for="la-memoria-centrale">La Memoria Centrale</a></li><li class="depth-1"><a href="#macchina-di-von-neumann" data-for="macchina-di-von-neumann">MACCHINA DI VON NEUMANN</a></li><li class="depth-1"><a href="#layer-fondamentali" data-for="layer-fondamentali">Layer fondamentali</a></li><li class="depth-1"><a href="#la-pipeline" data-for="la-pipeline">LA PIPELINE</a></li><li class="depth-1"><a href="#hazard" data-for="hazard">Hazard</a></li><li class="depth-2"><a href="#tipologie-principali" data-for="tipologie-principali">Tipologie principali</a></li><li class="depth-1"><a href="#esecuzione-fuori-ordine-out-of-order-execution" data-for="esecuzione-fuori-ordine-out-of-order-execution">Esecuzione Fuori Ordine (Out-of-Order Execution)</a></li><li class="depth-1"><a href="#branch-prediction" data-for="branch-prediction">Branch Prediction</a></li><li class="depth-2"><a href="#rollback" data-for="rollback">ROLLBACK</a></li><li class="depth-1"><a href="#il-microprocessore" data-for="il-microprocessore">IL MICROPROCESSORE</a></li><li class="depth-1"><a href="#evoluzione-isa-istruction-set-architecture" data-for="evoluzione-isa-istruction-set-architecture">EVOLUZIONE ISA (ISTRUCTION SET ARCHITECTURE)</a></li><li class="depth-1"><a href="#architetture-superscalari" data-for="architetture-superscalari">ARCHITETTURE SUPERSCALARI</a></li><li class="depth-1"><a href="#superpipelining" data-for="superpipelining">SUPERPIPELINING</a></li><li class="depth-1"><a href="#issue-width" data-for="issue-width">Issue Width</a></li><li class="depth-1"><a href="#era-multicore" data-for="era-multicore">Era Multicore</a></li><li class="depth-1"><a href="#gpu-e-parallelismo-massivo" data-for="gpu-e-parallelismo-massivo">GPU e Parallelismo Massivo</a></li><li class="depth-1"><a href="#architetture-ibride-ed-eterogenee" data-for="architetture-ibride-ed-eterogenee">Architetture ibride ed Eterogenee</a></li><li class="depth-0"><a href="#memoria" data-for="memoria">MEMORIA</a></li><li class="depth-1"><a href="#cache-e-gerarchie-di-memoria" data-for="cache-e-gerarchie-di-memoria">Cache e Gerarchie di Memoria</a></li><li class="depth-2"><a href="#livelli-di-cache" data-for="livelli-di-cache">Livelli di cache</a></li><li class="depth-2"><a href="#politiche-di-sostituzione" data-for="politiche-di-sostituzione">Politiche di sostituzione</a></li><li class="depth-1"><a href="#memoria-virtuale" data-for="memoria-virtuale">Memoria Virtuale</a></li><li class="depth-2"><a href="#tecniche-di-mappatura" data-for="tecniche-di-mappatura">Tecniche di mappatura</a></li><li class="depth-1"><a href="#cache-e-gerarchie-di-memoria-1" data-for="cache-e-gerarchie-di-memoria-1">Cache e Gerarchie di Memoria</a></li><li class="depth-2"><a href="#livelli-di-cache-1" data-for="livelli-di-cache-1">Livelli di cache</a></li><li class="depth-2"><a href="#politiche-di-sostituzione-1" data-for="politiche-di-sostituzione-1">Politiche di sostituzione</a></li><li class="depth-1"><a href="#memoria-virtuale-1" data-for="memoria-virtuale-1">Memoria Virtuale</a></li><li class="depth-2"><a href="#tecniche-di-mappatura-1" data-for="tecniche-di-mappatura-1">Tecniche di mappatura</a></li><li class="depth-0"><a href="#bus" data-for="bus">BUS</a></li><li class="depth-0"><a href="#io" data-for="io">I/O</a></li><li class="depth-0"><a href="#processore" data-for="processore">PROCESSORE</a></li><li class="depth-2"><a href="#componenti-principali" data-for="componenti-principali">COMPONENTI PRINCIPALI</a></li><li class="depth-2"><a href="#data-path" data-for="data-path">DATA PATH</a></li><li class="depth-1"><a href="#ciclo-di-istruzione-del-processore" data-for="ciclo-di-istruzione-del-processore">CICLO DI ISTRUZIONE DEL PROCESSORE</a></li><li class="depth-1"><a href="#tipologie-di-architettura" data-for="tipologie-di-architettura">TIPOLOGIE DI ARCHITETTURA</a></li><li class="depth-2"><a href="#cisc-complex-instruction-set-computer" data-for="cisc-complex-instruction-set-computer">CISC (Complex Instruction Set Computer)</a></li><li class="depth-2"><a href="#risc-reduced-instruction-set-computer" data-for="risc-reduced-instruction-set-computer">RISC (Reduced Instruction Set Computer)</a></li><li class="depth-2"><a href="#sistema-di-cache" data-for="sistema-di-cache">Sistema di Cache</a></li><li class="depth-2"><a href="#livelli-di-cache-2" data-for="livelli-di-cache-2">Livelli di cache:</a></li><li class="depth-2"><a href="#prefetch" data-for="prefetch">Prefetch</a></li><li class="depth-2"><a href="#superscalar-architecture" data-for="superscalar-architecture">Superscalar Architecture</a></li><li class="depth-2"><a href="#architetture-cisc-e-ibridi-moderni" data-for="architetture-cisc-e-ibridi-moderni">Architetture CISC e ibridi moderni</a></li><li class="depth-0"><a href="#livello-software" data-for="livello-software">LIVELLO SOFTWARE</a></li><li class="depth-1"><a href="#il-processo-di-programmazione-e-traduzione" data-for="il-processo-di-programmazione-e-traduzione">Il Processo di Programmazione e Traduzione</a></li><li class="depth-2"><a href="#livelli-di-linguaggio" data-for="livelli-di-linguaggio">Livelli di Linguaggio</a></li><li class="depth-2"><a href="#strumenti-di-traduzione" data-for="strumenti-di-traduzione">Strumenti di Traduzione</a></li><li class="depth-1"><a href="#generazione-del-programma-oggetto" data-for="generazione-del-programma-oggetto">Generazione del Programma Oggetto</a></li><li class="depth-2"><a href="#flusso-di-lavoro" data-for="flusso-di-lavoro">Flusso di Lavoro</a></li><li class="depth-2"><a href="#assemblatore-a-due-passate" data-for="assemblatore-a-due-passate">Assemblatore a Due Passate</a></li><li class="depth-1"><a href="#esecuzione-e-debug-del-programma" data-for="esecuzione-e-debug-del-programma">Esecuzione e Debug del Programma</a></li><li class="depth-2"><a href="#loader-caricatore" data-for="loader-caricatore">Loader (Caricatore)</a></li><li class="depth-2"><a href="#debugger" data-for="debugger">Debugger</a></li><li class="depth-1"><a href="#il-sistema-operativo-so" data-for="il-sistema-operativo-so">Il Sistema Operativo (SO)</a></li><li class="depth-0"><a href="#pipeline" data-for="pipeline">PIPELINE</a></li><li class="depth-1"><a href="#data-hazard" data-for="data-hazard">DATA HAZARD</a></li><li class="depth-2"><a href="#istruzioni-nop" data-for="istruzioni-nop">ISTRUZIONI NOP</a></li><li class="depth-1"><a href="#inoltro-degli-operatori-forwarding" data-for="inoltro-degli-operatori-forwarding">INOLTRO DEGLI OPERATORI (FORWARDING)</a></li><li class="depth-1"><a href="#ritardi-della-memoria" data-for="ritardi-della-memoria">Ritardi della memoria</a></li><li class="depth-1"><a href="#ritardi-nei-salti" data-for="ritardi-nei-salti">Ritardi nei salti</a></li><li class="depth-1"><a href="#riduzione-della-penalità-di-salto" data-for="riduzione-della-penalità-di-salto">Riduzione della penalità di salto</a></li><li class="depth-1"><a href="#salto-differito-delayed-branch" data-for="salto-differito-delayed-branch">Salto differito (Delayed Branch)</a></li><li class="depth-1"><a href="#predizione-dei-salti" data-for="predizione-dei-salti">Predizione dei salti</a></li><li class="depth-2"><a href="#predizione-statica" data-for="predizione-statica">Predizione statica</a></li><li class="depth-2"><a href="#predizione-dinamica" data-for="predizione-dinamica">Predizione dinamica</a></li><li class="depth-1"><a href="#buffer-di-destinazione-di-salto-branch-target-buffer" data-for="buffer-di-destinazione-di-salto-branch-target-buffer">Buffer di destinazione di salto (Branch Target Buffer)</a></li><li class="depth-1"><a href="#limiti-di-risorse" data-for="limiti-di-risorse">Limiti di risorse</a></li><li class="depth-1"><a href="#valutazione-delle-prestazioni" data-for="valutazione-delle-prestazioni">Valutazione delle prestazioni</a></li><li class="depth-2"><a href="#modello-senza-pipeline" data-for="modello-senza-pipeline">Modello senza pipeline</a></li><li class="depth-2"><a href="#modello-con-pipeline" data-for="modello-con-pipeline">Modello con pipeline</a></li><li class="depth-2"><a href="#effetto-dei-conflitti" data-for="effetto-dei-conflitti">Effetto dei conflitti</a></li><li class="depth-1"><a href="#processori-superscalari" data-for="processori-superscalari">Processori superscalari</a></li><li class="depth-2"><a href="#componenti-principali-1" data-for="componenti-principali-1">Componenti principali</a></li><li class="depth-1"><a href="#dipendenze-di-dato-e-stazioni-di-prenotazione" data-for="dipendenze-di-dato-e-stazioni-di-prenotazione">Dipendenze di dato e stazioni di prenotazione</a></li><li class="depth-1"><a href="#esecuzione-fuori-ordine" data-for="esecuzione-fuori-ordine">Esecuzione fuori ordine</a></li><li class="depth-2"><a href="#ridenominazione-dei-registri" data-for="ridenominazione-dei-registri">Ridenominazione dei registri</a></li><li class="depth-2"><a href="#buffer-di-riordino-reorder-buffer" data-for="buffer-di-riordino-reorder-buffer">Buffer di riordino (Reorder Buffer)</a></li><li class="depth-1"><a href="#pipeline-nei-processori-cisc" data-for="pipeline-nei-processori-cisc">Pipeline nei processori CISC</a></li><li class="depth-2"><a href="#soluzione-nei-processori-intel-core-i7" data-for="soluzione-nei-processori-intel-core-i7">Soluzione nei processori Intel Core i7</a></li><li class="depth-0"><a href="#struttura-base-cpu" data-for="struttura-base-cpu">STRUTTURA BASE CPU</a></li><li class="overflow-end"></li></ul></div><div class="backlinks"><h3>Backlinks</h3><ul id="list-2" class="overflow"><li><a href="./" class="internal">Hub</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.2</a> © 2025</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module">function f(i,e){if(!i)return;function r(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function t(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}i?.addEventListener("click",r),window.addCleanup(()=>i?.removeEventListener("click",r)),document.addEventListener("keydown",t),window.addCleanup(()=>document.removeEventListener("keydown",t))}function y(i){for(;i.firstChild;)i.removeChild(i.firstChild)}var h=class{constructor(e,r){this.container=e;this.content=r;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),r=this.onMouseMove.bind(this),t=this.onMouseUp.bind(this),o=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",r),document.addEventListener("mouseup",t),window.addEventListener("resize",o),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",r),()=>document.removeEventListener("mouseup",t),()=>window.removeEventListener("resize",o))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let r=this.createButton("+",()=>this.zoom(.1)),t=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(t),e.appendChild(o),e.appendChild(r),this.container.appendChild(e)}createButton(e,r){let t=document.createElement("button");return t.textContent=e,t.className="mermaid-control-button",t.addEventListener("click",r),window.addCleanup(()=>t.removeEventListener("click",r)),t}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}zoom(e){let r=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),t=this.content.getBoundingClientRect(),o=t.width/2,n=t.height/2,c=r-this.scale;this.currentPan.x-=o*c,this.currentPan.y-=n*c,this.scale=r,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){this.scale=1;let e=this.content.querySelector("svg");this.currentPan={x:e.getBoundingClientRect().width/2,y:e.getBoundingClientRect().height/2},this.updateTransform()}},C=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],E;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;E||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let r=E.default,t=new WeakMap;for(let n of e)t.set(n,n.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let a=t.get(s);a&&(s.innerHTML=a)}let n=C.reduce((s,a)=>(s[a]=window.getComputedStyle(document.documentElement).getPropertyValue(a),s),{}),c=document.documentElement.getAttribute("saved-theme")==="dark";r.initialize({startOnLoad:!1,securityLevel:"loose",theme:c?"dark":"base",themeVariables:{fontFamily:n["--codeFont"],primaryColor:n["--light"],primaryTextColor:n["--darkgray"],primaryBorderColor:n["--tertiary"],lineColor:n["--darkgray"],secondaryColor:n["--secondary"],tertiaryColor:n["--tertiary"],clusterBkg:n["--light"],edgeLabelBackground:n["--highlight"]}}),await r.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let n=0;n<e.length;n++){let v=function(){let g=l.querySelector("#mermaid-space"),m=l.querySelector(".mermaid-content");if(!m)return;y(m);let w=c.querySelector("svg").cloneNode(!0);m.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new h(g,m)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},c=e[n],s=c.parentElement,a=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(a),L=a.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),f(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script type="application/javascript">
+        const socket = new WebSocket('ws://localhost:3001')
+        // reload(true) ensures resources like images and scripts are fetched again in firefox
+        socket.addEventListener('message', () => document.location.reload(true))
+      </script><script src="./postscript.js" type="module"></script></html>
