@@ -6,6 +6,7 @@
 
 
 
+---
 
 # Strutture Algebriche
 Gli insiemi numerici principali sono i seguenti:
